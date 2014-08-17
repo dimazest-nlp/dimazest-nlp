@@ -1,6 +1,10 @@
-%global scl_name_base python
-%global scl_name_version 33
-%global scl %{scl_name_base}%{scl_name_version}
+%if 0%{?copr_username:1}
+%global scl %{copr_username}-%{copr_projectname}
+%else
+%global scl dimazest-nlp
+%endif
+%scl_package %scl
+
 ## General notes about python33 SCL packaging
 # - the names of packages are NOT prefixed with 'python3-' (e.g. are the same as in Fedora)
 # - the names of binaries of Python 3 itself are both python{-debug,...} and python3{-debug,...}
@@ -10,6 +14,7 @@
 #   and %{__python3} are available
 
 %scl_package %scl
+
 %global _turn_off_bytecompile 1
 
 %global install_scl 1
@@ -19,10 +24,10 @@
 
 Summary: Package that installs %scl
 Name: %scl_name
-Version: 1.1
-Release: 13%{?dist}
+Version: 1
+Release: 1%{?dist}
 License: GPLv2+
-Source0: macros.additional.%{scl}
+Source0: macros.additional.%{scl_name}
 Source1: README
 Source2: LICENSE
 BuildRequires: help2man
@@ -31,13 +36,13 @@ BuildRequires: iso-codes
 BuildRequires: scl-utils-build
 %if 0%{?install_scl}
 Requires: %{scl_prefix}python
-Requires: %{scl_prefix}python-jinja2
-Requires: %{scl_prefix}python-nose
-Requires: %{scl_prefix}python-simplejson
-Requires: %{scl_prefix}python-setuptools
-Requires: %{scl_prefix}python-sphinx
-Requires: %{scl_prefix}python-sqlalchemy
-Requires: %{scl_prefix}python-virtualenv
+# Requires: %{scl_prefix}python-jinja2
+# Requires: %{scl_prefix}python-nose
+# Requires: %{scl_prefix}python-simplejson
+# Requires: %{scl_prefix}python-setuptools
+# Requires: %{scl_prefix}python-sphinx
+# Requires: %{scl_prefix}python-sqlalchemy
+# Requires: %{scl_prefix}python-virtualenv
 %endif
 
 %description
@@ -114,14 +119,14 @@ EOF
 
 # install generated man page
 mkdir -p %{buildroot}%{_mandir}/man7/
-install -m 644 %{scl_name}.7 %{buildroot}%{_mandir}/man7/%{scl_name}.7
+# install -m 644 %{scl_name}.7 %{buildroot}%{_mandir}/man7/%{scl_name}.7
 
 %files
 
-%files runtime -f filesystem
+%files runtime
 %doc README LICENSE
 %scl_files
-%{_mandir}/man7/%{scl_name}.*
+# %{_mandir}/man7/%{scl_name}.*
 
 %files build
 %{_root_sysconfdir}/rpm/macros.%{scl}-config
@@ -130,6 +135,10 @@ install -m 644 %{scl_name}.7 %{buildroot}%{_mandir}/man7/%{scl_name}.7
 %{_root_sysconfdir}/rpm/macros.%{scl_name_base}-scldevel
 
 %changelog
+* Sun Aug 17 2014 Dmitrijs Milajevs <dimazest@gmail.com> - 1-1
+- Renamed to dimazest-nlp, was python33.
+- Copr support.
+
 * Mon Mar 31 2014 Honza Horak <hhorak@redhat.com> - 1.1-13
 - Fix path typo in README
   Related: #1061458
