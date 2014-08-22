@@ -1,7 +1,7 @@
 %if 0%{?copr_username:1}
-%global scl %{copr_username}-%{copr_projectname}
+%global scl %{copr_username}_%{copr_projectname}
 %else
-%global scl dimazest-nlp
+%global scl dimazest_nlp
 %endif
 %scl_package %scl
 
@@ -25,7 +25,7 @@
 Summary: Package that installs %scl
 Name: %scl_name
 Version: 1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2+
 Source0: macros.additional.%{scl_name}
 Source1: README
@@ -39,7 +39,7 @@ Requires: %{scl_prefix}python
 # Requires: %{scl_prefix}python-jinja2
 # Requires: %{scl_prefix}python-nose
 # Requires: %{scl_prefix}python-simplejson
-# Requires: %{scl_prefix}python-setuptools
+Requires: %{scl_prefix}python-setuptools
 # Requires: %{scl_prefix}python-sphinx
 # Requires: %{scl_prefix}python-sqlalchemy
 # Requires: %{scl_prefix}python-virtualenv
@@ -112,9 +112,9 @@ cat %{SOURCE0} >> %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-config
 sed -i 's|@scl@|%{scl}|g' %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-config
 
 # Create the scldevel subpackage macros
-cat >> %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl_name_base}-scldevel << EOF
-%%scl_%{scl_name_base} %{scl}
-%%scl_prefix_%{scl_name_base} %{scl_prefix}
+cat >> %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-scldevel << EOF
+%%scl_%{scl} %{scl}
+%%scl_prefix_%{scl} %{scl_prefix}
 EOF
 
 # install generated man page
@@ -132,9 +132,12 @@ mkdir -p %{buildroot}%{_mandir}/man7/
 %{_root_sysconfdir}/rpm/macros.%{scl}-config
 
 %files scldevel
-%{_root_sysconfdir}/rpm/macros.%{scl_name_base}-scldevel
+%{_root_sysconfdir}/rpm/macros.%{scl}-scldevel
 
 %changelog
+* Fri Aug 22 2014 Dmitrijs Milajevs <dimazest@gmail.com> - 1-2
+- Get rid of scl_name_base
+
 * Sun Aug 17 2014 Dmitrijs Milajevs <dimazest@gmail.com> - 1-1
 - Renamed to dimazest-nlp, was python33.
 - Copr support.
