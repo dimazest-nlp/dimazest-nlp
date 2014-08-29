@@ -1,0 +1,16 @@
+# override __os_install_post for this collection
+# the @scl@* macros are defined in macros.python3.python33 in python33-python-devel
+# the name is intentionally hardcoded to always provide the same name
+%scl_package_override() %{expand:%{?@scl_safe@_os_install_post:%global __os_install_post %@scl_safe@_os_install_post}
+%global __python_requires %@scl_safe@_python_requires
+%global __python_provides %@scl_safe@_python_provides
+# macros commonly used in specfiles
+%global __python3 %@scl_safe@__python3
+%global __python %@scl_safe@__python3
+%global python3_sitelib %@scl_safe@python3_sitelib
+%global python_sitelib %@scl_safe@python3_sitelib
+%global python3_sitearch %@scl_safe@python3_sitearch
+%global python_sitearch %@scl_safe@python3_sitearch
+%global python3_version %@scl_safe@python3_version
+%global python_version %@scl_safe@python3_version
+}

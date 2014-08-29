@@ -1,7 +1,9 @@
 %if 0%{?copr_username:1}
-%global scl %{copr_username}_%{copr_projectname}
+%global scl %{copr_username}-%{copr_projectname}
+%global scl_safe %{copr_username}_%{copr_projectname}
 %else
-%global scl dimazest_nlp
+%global scl dimazest-nlp
+%global scl_safe dimazest_nlp
 %endif
 %scl_package %scl
 
@@ -110,11 +112,12 @@ EOF
 # Add the aditional macros to macros.%%{scl}-config
 cat %{SOURCE0} >> %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-config
 sed -i 's|@scl@|%{scl}|g' %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-config
+sed -i 's|@scl_safe@|%{scl_safe}|g' %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-config
 
 # Create the scldevel subpackage macros
 cat >> %{buildroot}%{_root_sysconfdir}/rpm/macros.%{scl}-scldevel << EOF
-%%scl_%{scl} %{scl}
-%%scl_prefix_%{scl} %{scl_prefix}
+%%scl_%{scl_safe} %{scl}
+%%scl_prefix_%{scl_safe} %{scl_prefix}
 EOF
 
 # install generated man page
